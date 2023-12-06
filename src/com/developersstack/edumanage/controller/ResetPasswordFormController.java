@@ -15,7 +15,7 @@ import sun.security.util.Password;
 import java.io.IOException;
 import java.util.Optional;
 
-public class ResetPassordFormController {
+public class ResetPasswordFormController {
      public TextField txtPassword;
     public AnchorPane context;
     String selectedEmail = "";

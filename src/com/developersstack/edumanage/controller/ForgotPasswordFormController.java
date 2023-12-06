@@ -43,7 +43,7 @@ public class ForgotPasswordFormController {
             mimeMessage.addRecipient(Message.RecipientType.TO,new InternetAddress(toEmail));
 
 
-            Transport.send(mimeMessage);
+            //Transport.send(mimeMessage);
             System.out.println("Completed");
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../view/CodeVerificationForm.fxml"));

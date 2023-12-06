@@ -34,7 +34,7 @@ public class CodeVerificationFormController {
         if (String.valueOf(code).equals(txtCode.getText())){
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../view/ResetPasswordForm.fxml"));
             Parent parent = fxmlLoader.load();
-            ResetPassordFormController controller = fxmlLoader.getController();
+            ResetPasswordFormController controller = fxmlLoader.getController();
             controller.setUserData(selectedEmail );
             Stage stage =(Stage) context.getScene().getWindow();
             stage.setScene(new Scene(parent));
