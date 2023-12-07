@@ -5,22 +5,24 @@ import javafx.scene.control.Button;
 public class ProgramTM {
       private String code;
       private String name;
+      private String teacher;
       private Button btnTech;
       private double cost;
-      private String teacher;
-      private Button btn;
 
       public ProgramTM() {
       }
 
-      public ProgramTM(String code, String name, Button btnTech, double cost, String teacher, Button btn) {
+      public ProgramTM(String code, String name, String teacher, Button btnTech, double cost, Button btn) {
             this.code = code;
             this.name = name;
+            this.teacher = teacher;
             this.btnTech = btnTech;
             this.cost = cost;
-            this.teacher = teacher;
             this.btn = btn;
       }
+
+      private Button btn;
+
 
       public String getCode() {
             return code;
@@ -38,6 +40,14 @@ public class ProgramTM {
             this.name = name;
       }
 
+      public String getTeacher() {
+            return teacher;
+      }
+
+      public void setTeacher(String teacher) {
+            this.teacher = teacher;
+      }
+
       public Button getBtnTech() {
             return btnTech;
       }
@@ -46,20 +56,12 @@ public class ProgramTM {
             this.btnTech = btnTech;
       }
 
-      public String getCost() {
+      public double getCost() {
             return cost;
       }
 
       public void setCost(double cost) {
             this.cost = cost;
-      }
-
-      public String getTeacher() {
-            return teacher;
-      }
-
-      public void setTeacher(String teacher) {
-            this.teacher = teacher;
       }
 
       public Button getBtn() {
@@ -75,9 +77,9 @@ public class ProgramTM {
             return "ProgramTM{" +
                     "code='" + code + '\'' +
                     ", name='" + name + '\'' +
+                    ", teacher='" + teacher + '\'' +
                     ", btnTech=" + btnTech +
                     ", cost=" + cost +
-                    ", teacher='" + teacher + '\'' +
                     ", btn=" + btn +
                     '}';
       }

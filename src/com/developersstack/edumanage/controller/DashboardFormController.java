@@ -40,14 +40,14 @@ public class DashboardFormController {
             timeline.play();
     }
 
-    public void logOutOnAction(ActionEvent actionEvent) throws IOException {
-        setUi("LoginForm");
-    }
-
     private void setUi(String location) throws IOException {
         Stage stage = (Stage) context.getScene().getWindow();
         stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../view/" +location+".fxml"))));
         stage.centerOnScreen();
+    }
+
+    public void logOutOnAction(ActionEvent actionEvent) throws IOException {
+        setUi("LoginForm");
     }
 
     public void openStudentFormOnAction(ActionEvent actionEvent) throws IOException {
@@ -64,5 +64,9 @@ public class DashboardFormController {
 
     public void openTeacherFormOnAction(ActionEvent actionEvent) throws IOException {
         setUi("TeacherForm");
+    }
+
+    public void openRegisterFormOnAction(ActionEvent actionEvent) throws IOException {
+        setUi("RegistrationForm");
     }
 }

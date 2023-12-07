@@ -135,7 +135,7 @@ public class TeacherFormController {
                     setTeacherId();
                     clear();
                     setTableData(searchText);
-                    new Alert(Alert.AlertType.INFORMATION, "Student saved!").show();
+                    new Alert(Alert.AlertType.INFORMATION, "Teacher saved!").show();
                 } else {
                     new Alert(Alert.AlertType.WARNING, "Try Again!").show();
                 }
@@ -148,7 +148,7 @@ public class TeacherFormController {
             if (updateTeacher(teacher)) {
                 clear();
                 setTableData(searchText);
-                new Alert(Alert.AlertType.INFORMATION, "Student Updated!").show();
+                new Alert(Alert.AlertType.INFORMATION, "Teacher Updated!").show();
             } else {
                 new Alert(Alert.AlertType.WARNING, "Try Again!").show();
             }

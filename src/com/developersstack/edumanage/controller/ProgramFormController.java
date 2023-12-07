@@ -5,7 +5,6 @@ import com.developersstack.edumanage.model.Program;
 import com.developersstack.edumanage.model.Student;
 import com.developersstack.edumanage.model.Teacher;
 import com.developersstack.edumanage.view.tm.ProgramTM;
-import com.developersstack.edumanage.view.tm.StudentTM;
 import com.developersstack.edumanage.view.tm.TechAddTM;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,15 +15,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import org.w3c.dom.html.HTMLDListElement;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Optional;
 
 public class ProgramFormController {
@@ -41,8 +34,8 @@ public class ProgramFormController {
     public TableColumn colTCode;
     public TableColumn colTName;
     public TableColumn colTRemove;
-    public ComboBox cmbTeacher;
-    public TableView<ProgramTM> tblProgram;
+    public ComboBox<String> cmbTeacher;
+    public TableView<ProgramTM> tblPrograms;
     public TableColumn colCode;
     public TableColumn colName;
     public TableColumn colTechnology;
@@ -55,7 +48,7 @@ public class ProgramFormController {
 
         setProgramCode();
         setTeachers();
-        setTableData();
+        loadPrograms();
 
         colTCode.setCellValueFactory(new PropertyValueFactory<>("code"));
         colTName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -68,83 +61,36 @@ public class ProgramFormController {
         colCost.setCellValueFactory(new PropertyValueFactory<>("cost"));
         colOption.setCellValueFactory(new PropertyValueFactory<>("btn"));
 
-
-        tblProgram.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> {
-                    if (null!=newValue){
-                        setData(newValue);
-                    }
-                }
-        );
     }
 
-    ArrayList<String> teacherArray = new ArrayList<>();
+    ArrayList<String> teachersArray = new ArrayList<>();
+
     private void setTeachers() {
         for (Teacher t:Database.teacherTable
              ) {
-            teacherArray.add(t.getCode()+ "."+t.getName());
+            teachersArray.add(t.getCode()+ "."+t.getName());
         }
-        ObservableList<String> obList = FXCollections.observableArrayList(teacherArray);
+        ObservableList<String> obList = FXCollections.observableArrayList(teachersArray);
         cmbTeacher.setItems(obList  );
     }
 
-    private void setData(ProgramTM tm) {
-        txtCode.setText(tm.getCode());
-        txtName.setText(tm.getName());
-
-       // Double.parseDouble(txtCost.setText(tm.getCost()));
-        String costText = tm.getCost();
-        txtCost.setText(costText);
-
-        btn.setText("Update Program");
-    }
 
     private void setProgramCode() {
-        if(!Database.programTable.isEmpty()){
+        if (!Database.programTable.isEmpty()) {
             Program lastProgram = Database.programTable.get(
-                    Database.programTable.size()-1
+                    Database.programTable.size() - 1
             );
             String lastId = lastProgram.getCode();
             String splitData[] = lastId.split("-");
-            String lastIntegerNumberAsString = splitData[1];
-            int lastIntegerIdAsInt = Integer.parseInt(lastIntegerNumberAsString);
+            String lastIdIntegerNumberAsAString = splitData[1];
+            int lastIntegerIdAsInt = Integer.parseInt(lastIdIntegerNumberAsAString);
             lastIntegerIdAsInt++;
-            String generatedProgramCode = "P-"+ lastIntegerIdAsInt;
-            txtCode.setText(generatedProgramCode);
-
-        }else{
+            String generatedStudentId = "P-" + lastIntegerIdAsInt;
+            txtCode.setText(generatedStudentId);
+        } else {
             txtCode.setText("P-1");
         }
     }
-
-    private void setTableData() {
-            ObservableList<ProgramTM> obList = FXCollections.observableArrayList();
-            for (Program p: Database.programTable) {
-                    Button techButton = new Button("Show Technology");
-                    Button removeButton = new Button("Delete");
-                    ProgramTM tm = new ProgramTM(
-                            p.getCode(),
-                            p.getName(),
-                            techButton,
-                            p.getCost(),
-                            p.getTeacherId(),
-                            removeButton
-                    );
-
-                    btn.setOnAction(e->{
-                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Are You sure!",ButtonType.YES,ButtonType.NO);
-                        Optional<ButtonType> buttonType  = alert.showAndWait();
-                        if (buttonType.get().equals(ButtonType.YES)){
-                            Database.programTable.remove(p);
-                            new Alert(Alert.AlertType.INFORMATION,"Deleted").show();
-                            setTableData();
-                        }
-                    });
-                    obList.add(tm);
-                }
-
-            tblProgram.setItems(obList);
-        }
 
 
     public void newProgramOnAction(ActionEvent actionEvent) {
@@ -163,35 +109,38 @@ public class ProgramFormController {
             pointer++;
         }
         if(btn.getText().equalsIgnoreCase("Save Program")){
-
             Program program =new Program(
                     txtCode.getText(),
                     txtName.getText(),
                     selectedTechs,
-                    cmbTeacher.getValue().split("\\.")[0],
-                    Double.parseDouble(txtCost.getText());
+                    Double.parseDouble(txtCost.getText()),
+                    cmbTeacher.getValue().split("\\.")[0]
+
             );
 
             Database.programTable.add(program);
-            setProgramCode();
-            clear();
-            setTableData();
             new Alert(Alert.AlertType.INFORMATION,"Program Saved!").show();
+            loadPrograms();
         }
-        else{
-            for (Program p:Database.programTable
-            ) {
-               if(p.set().equals(txtCode.getText())){
-                    p.setName(txtName.getText());
-                    p.setCost(Double.parseDouble(txtCost.getText()));
-                    clear();
-                    setProgramCode();
-                    return;
-                }
-            }
-            new Alert(Alert.AlertType.WARNING,"Not Fond").show();
+    }
 
+    private void loadPrograms() {
+        ObservableList<ProgramTM> programsTmList = FXCollections.observableArrayList();
+        for (Program p : Database.programTable
+        ) {
+            Button techButton = new Button("show Tech");
+            Button removeButton = new Button("Delete");
+            ProgramTM tm = new ProgramTM(
+                    p.getCode(),
+                    p.getName(),
+                    p.getTeacherId(),
+                    techButton,
+                    p.getCost(),
+                    removeButton
+            );
+            programsTmList.add(tm);
         }
+        tblPrograms.setItems(programsTmList);
     }
 
     private void clear(){
@@ -211,6 +160,7 @@ public class ProgramFormController {
     }
 
     ObservableList<TechAddTM> tmList = FXCollections.observableArrayList();
+
     public void addTechOnAction(ActionEvent actionEvent) {
         if (isExists(txtTechnology.getText().trim())){
             Button btn = new Button("Remove");
@@ -225,6 +175,7 @@ public class ProgramFormController {
             new Alert(Alert.AlertType.WARNING,"Already Exists").show();
         }
     }
+
     private boolean isExists(String tech){
         for (TechAddTM tm: tmList
              ) {
