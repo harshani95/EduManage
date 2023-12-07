@@ -34,7 +34,7 @@
          </font>
       </Label>
       <Separator layoutX="425.0" layoutY="28.0" orientation="VERTICAL" prefHeight="39.0" prefWidth="7.0" />
-      <Button layoutX="19.0" layoutY="240.0" mnemonicParsing="false" prefHeight="84.0" prefWidth="700.0" style="-fx-background-color: #0c2461;" text="Registration" textFill="#eeecec">
+      <Button layoutX="19.0" layoutY="240.0" mnemonicParsing="false" onAction="#openRegisterFormOnAction" prefHeight="84.0" prefWidth="700.0" style="-fx-background-color: #0c2461;" text="Registration" textFill="#eeecec">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
